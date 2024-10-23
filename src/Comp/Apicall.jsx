@@ -5,11 +5,14 @@ import superagent from "superagent";
 function Apicall() {
   const [aposts, setAPosts] = useState([]);
   const [sposts, setSPosts] = useState([]);
-  const [subReddit, setSubReddit] = useState("space");
+  const [subReddit, setSubReddit] = useState("");
+  const [tmp, setTmp] = useState("");
   const [toggle, setToggle] = useState(true);
 
   useEffect(() => {
-    toggle ? getRedditByAxios() : getRedditBySuperAgent();
+    if (subReddit !== "") {
+      toggle ? getRedditByAxios() : getRedditBySuperAgent();
+    }
   }, [toggle]);
 
   const getRedditByAxios = () => {
@@ -44,10 +47,23 @@ function Apicall() {
 
   return (
     <div>
-      <button onClick={() => setToggle((t) => !t)}>
-        Toggle Axios and Super-agent
-      </button>
-      <h1>{`/r/${subReddit} - ${toggle ? "Axios" : "Super-agent"}`}</h1>
+      <div className="top-bar">
+        <input
+          type="text"
+          placeholder="Enter sub-reddit here..."
+          value={subReddit}
+          onChange={(e) => setSubReddit(e.target.value)}
+        />
+        <button
+          onClick={() => {
+            setToggle((t) => !t);
+            setTmp(subReddit);
+          }}
+        >
+          Toggle Axios and Super-agent
+        </button>
+      </div>
+      <h1>{`/r/${tmp} - ${toggle ? "Axios" : "Super-agent"}`}</h1>
       <ul>
         {p.map((p) => (
           <li key={p.id}>
